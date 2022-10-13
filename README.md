@@ -1,6 +1,6 @@
 # Squid on Alpine with SSLBump
 
-[![Build Status](https://travis-ci.com/ohermosa/squid-alpine-ssl.svg?branch=master)](https://travis-ci.com/ohermosa/squid-alpine-ssl)
+[![Build Status](https://app.travis-ci.com/github/osmollo/squid-alpine-ssl.svg?branch=master)](https://app.travis-ci.com/github/osmollo/squid-alpine-ssl)
 
 :information_source: This repository is forked from [alatas/squid-alpine-ssl](https://github.com/alatas/squid-alpine-ssl)
 
@@ -13,7 +13,7 @@
   - [Settings and Folders](#settings-and-folders)
   - [SSLBump Root Certificate](#sslbump-root-certificate)
 
-Fundamentally, I configure Squid 4.13 on Alpine Linux 3.10 and add **SSLBump** feature to **Squid** in this image.
+Fundamentally, I configure Squid 5.5 on Alpine Linux 3.16 and add **SSLBump** feature to **Squid** in this image.
 
 The total size of this image is 16MB. You can get up and running this full feature web proxy in a minute or so.
 
@@ -21,10 +21,10 @@ The **SSLBump** feature is an optional feature in this image, and use this featu
 
 ## Quick Start
 
-1. Download the [latest release](https://github.com/ohermosa/squid-alpine-ssl/releases/latest) and unzip. You may use the command below or do it manually.
+1. Download the [latest release](https://github.com/osmollo/squid-alpine-ssl/releases/latest) and unzip. You may use the command below or do it manually.
 
 ```shell
-curl -s https://api.github.com/repos/ohermosa/squid-alpine-ssl/releases/latest | grep "browser_download_url.*docker.zip" | head -1 | cut -d : -f 2,3 | cut -d '"' -f 2 | xargs curl -L -o release.zip ; unzip release.zip ; rm release.zip
+curl -s https://api.github.com/repos/osmollo/squid-alpine-ssl/releases/latest | grep "browser_download_url.*docker.zip" | head -1 | cut -d : -f 2,3 | cut -d '"' -f 2 | xargs curl -L -o release.zip ; unzip release.zip ; rm release.zip
 ```
 
 2. (Optional) Edit `docker-compose.yml` and `conf/squid.conf` files
@@ -59,25 +59,25 @@ The configuration of this image provides two different endpoints to the proxy. O
 
 SSLBump is an SSL/HTTPS interception. HTTPS interception has ethical and legal issues which you need to be aware of which are follows;
 
-* Some countries do not limit what can be done within the home environment,
-* Some countries permit employment or contract law to overrule privacy,
-* Some countries require government registration for all decryption services,
-* Some countries it is an outright capital offense with severe penalties
-* DO SEEK legal advice before using SSLBump feature, even at home.
+- Some countries do not limit what can be done within the home environment,
+- Some countries permit employment or contract law to overrule privacy,
+- Some countries require government registration for all decryption services,
+- Some countries it is an outright capital offense with severe penalties
+- DO SEEK legal advice before using SSLBump feature, even at home.
 
 ## Settings and Folders
 
 There are a few settings in the `docker-compose.yml` file as follows:
 
-* Ports: There are two TCP endpoint configurations. 3128 is the regular proxy port of squid and it is not sslbump feature enabled. 4128 is the sslbump enabled port. If you want to change local ports to connect, change the first part of the settings. (ex. "8080:3128")
-* Environment values: Squid needs [a root certificate](#sslbump-root-certificate) for the sslbump feature. The following settings are used when the first time root certificate is created. If you need to recreate the root certificate, you need to delete all files in the `cert` folder.
-  * `CN`: Common name of the certificate
-  * `O` : Organization of the certificate owner
-  * `OU`: Organization unit of the certificate owner
-  * `C` : Two letter code of the country
-* Folders: There are three different folders that the image is using. `log` folder is used for storing access logs. `cache` folder is used for storing proxy cache. `cert` folder is used to store the root certificate.
+- Ports: There are two TCP endpoint configurations. 3128 is the regular proxy port of squid and it is not sslbump feature enabled. 4128 is the sslbump enabled port. If you want to change local ports to connect, change the first part of the settings. (ex. "8080:3128")
+- Environment values: Squid needs [a root certificate](#sslbump-root-certificate) for the sslbump feature. The following settings are used when the first time root certificate is created. If you need to recreate the root certificate, you need to delete all files in the `cert` folder.
+  - `CN`: Common name of the certificate
+  - `O` : Organization of the certificate owner
+  - `OU`: Organization unit of the certificate owner
+  - `C` : Two letter code of the country
+- Folders: There are three different folders that the image is using. `log` folder is used for storing access logs. `cache` folder is used for storing proxy cache. `cert` folder is used to store the root certificate.
 
-Squid configuration file is located in `conf/squid.conf`. You may refer [the official documentation](http://www.squid-cache.org/Versions/v3/3.5/cfgman/) of squid before change the file.
+Squid configuration file is located in `conf/squid.conf`. You may refer [the official documentation](http://www.squid-cache.org/Versions/v5/cfgman/) of squid before change the file.
 
 ## SSLBump Root Certificate
 
