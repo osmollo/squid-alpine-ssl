@@ -1,0 +1,47 @@
+
+name: Build new image
+on: [push]
+
+jobs:
+  build_image:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v3
+
+    - name: Read release.json
+      uses: notiz-dev/github-action-json-property@release
+      id: version_info
+      with:
+        path: 'release.json'
+        prop_path: 'version'
+
+    - name: Show version number
+      run: echo "Version is ${{ steps.version_info.outputs.prop }}"
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USER }}
+        password: ${{ secrets.DOCKERHUB_PASS }}
+
+    - name: Build, tag, and push image to Dockerhub
+      env:
+        docker_user: osmollo
+        docker_image: squid-samuel-ssl
+        docker_version: ${{ steps.version_info.outputs.prop }}
+      run: |
+        docker build -t $docker_user/$docker_image:$docker_version .
+        docker push $docker_user/$docker_image:$docker_version
+        docker tag $docker_user/$docker_image:$docker_version $docker_user/$docker_image:latest
+        docker push $docker_user/$docker_image:latest
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        tag_name: "${{ steps.version_info.outputs.prop }}"
+        release_name: Release ${{ steps.version_info.outputs.prop }}
