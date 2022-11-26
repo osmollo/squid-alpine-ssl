@@ -1,6 +1,6 @@
-FROM alpine:3.10
+FROM alpine:3.17
 
-LABEL maintainer="ohermosa@gmail.com"
+LABEL maintainer="osmollo@proton.me"
 
 #set enviromental values for certificate CA generation
 ENV CN=squid.local \
