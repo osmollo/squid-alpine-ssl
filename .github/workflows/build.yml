@@ -29,7 +29,7 @@ jobs:
     - name: Build, tag, and push image to Dockerhub
       env:
         docker_user: osmollo
-        docker_image: squid-samuel-ssl
+        docker_image: squid-alpine-ssl
         docker_version: ${{ steps.version_info.outputs.prop }}
       run: |
         docker build -t $docker_user/$docker_image:$docker_version .
